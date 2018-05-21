@@ -105,7 +105,7 @@
         </div>
       </div>
 
-      {{-- @include('form') --}}
+      @include('form')
 
     </div> <!-- /container -->
 
@@ -137,7 +137,16 @@
           {data: 'email', name:'email'},
           {data: 'action', name:'action', orderable: false, searchable: false},
         ]
-      })
+      });
+
+      function addForm() {
+        save_method = "add";
+        $('input[name=_method]').val('POST');
+        $('#modal-form').modal('show');
+        $('#modal-form form')[0].reset();
+        $('.modal-title').text('Add Contact');
+      }
+ 
     </script>
 
     </body>
