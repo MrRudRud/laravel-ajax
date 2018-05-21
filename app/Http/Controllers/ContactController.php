@@ -64,7 +64,8 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-        //
+        $contact = Contact::find($id);
+        return $contact;
     }
 
     /**
@@ -91,7 +92,7 @@ class ContactController extends Controller
     }
 
     public function apiContact(){
-        $contact = Contact::all();
+        $contact = Contact::orderBy('id','desc');
         return Datatables::of($contact)
             ->addColumn('action', function($contact) {
                 return 

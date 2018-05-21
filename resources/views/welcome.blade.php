@@ -147,6 +147,8 @@
         $('.modal-title').text('Add Contact');
       }
 
+
+
       // (3) Input with Ajax Request
       $(function() {
         $('#modal-form form').validator().on('submit', function (e) {
@@ -161,7 +163,7 @@
                 data : $('#modal-form form').serialize(),
                 success : function($data) {
                     $('#modal-form').modal('hide');
-                    // table.ajax.reload();
+                    table.ajax.reload();
                 },
                 error : function() {
                     alert('Oops! Somethong Error!');
