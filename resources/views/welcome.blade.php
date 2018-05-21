@@ -127,17 +127,17 @@
     <script src="{{ asset('assets/bootstrap/js/ie10-viewport-bug-workaround.js') }}"></script> 
 
     <script>
-      $('#contact-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('api.contact')}}",
-        columns: [
-          {data: 'id', name:'id'},
-          {data: 'name', name:'name'},
-          {data: 'email', name:'email'},
-          {data: 'action', name:'action', orderable: false, searchable: false},
-        ]
-      });
+      var table = $('#contact-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: "{{ route('api.contact')}}",
+                    columns: [
+                      {data: 'id', name:'id'},
+                      {data: 'name', name:'name'},
+                      {data: 'email', name:'email'},
+                      {data: 'action', name:'action', orderable: false, searchable: false},
+                    ]
+                  });
 
       function addForm() {
         save_method = "add";
@@ -146,6 +146,31 @@
         $('#modal-form form')[0].reset();
         $('.modal-title').text('Add Contact');
       }
+
+      // (3) Input with Ajax Request
+      $(function() {
+        $('#modal-form form').validator().on('submit', function (e) {
+            if(!e.isDefaultPrevented()) {
+              var id = $('#id').val();
+              if(save_method == 'add') url = "{{ url('contact') }}";
+              else url = "{{ url('contact') . '/' }}" + id;
+
+              $.ajax({
+                url : url,
+                type : "POST",
+                data : $('#modal-form form').serialize(),
+                success : function($data) {
+                    $('#modal-form').modal('hide');
+                    // table.ajax.reload();
+                },
+                error : function() {
+                    alert('Oops! Somethong Error!');
+                }
+              });
+              return false;
+            }          
+        })
+      });
  
     </script>
 
