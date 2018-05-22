@@ -147,6 +147,30 @@
         $('.modal-title').text('Add Contact');
       }
 
+      function deleteData(id) {
+        // (1) Delete Popup confirmation
+        var popup = confirm("Are you sure want to delete this data ?");
+        // (2) check meta content
+        var csrf_token = $('meta[name="csrf-token"]').attr('content');
+        // (3) check if the confirmation was true Ajax will do the request delete
+        if(popup == true){
+          $.ajax({
+            // set the URL
+            url : "{{ url('contact') }}" + '/' + id,
+            // set type of method
+            type : "POST",
+            data : {'_method' : 'DELETE', '_token' : csrf_token},
+            success: function(data) {
+              table.ajax.reload();
+              console.log(data)
+            },
+            error : function () {
+              alert("Oops! Something Wrong!");
+            }
+          })
+        }
+      }
+
       // (2) edit form
       function editForm(id) {
         save_method = 'edit';
@@ -169,7 +193,6 @@
             alert("Nothing Data");
           }
         });
-        
       }
 
       // (3) Input with Ajax Request
