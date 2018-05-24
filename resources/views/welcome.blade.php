@@ -148,12 +148,17 @@
       }
 
       function deleteData(id) {
-        // (1) Delete Popup confirmation
-        var popup = confirm("Are you sure want to delete this data ?");
-        // (2) check meta content
         var csrf_token = $('meta[name="csrf-token"]').attr('content');
-        // (3) check if the confirmation was true Ajax will do the request delete
-        if(popup == true){
+        // Javascript Alert Replaced by SweetAlert(swal)
+        swal({
+          title: 'Are you sure?',
+          text : "You won't be able to revert this!",
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonColor: '#d33',
+          confirmButtonColor: '#3085d6',
+          confirmButtonTest: 'Yes, delete it!'
+        }).then(function () {
           $.ajax({
             // set the URL
             url : "{{ url('contact') }}" + '/' + id,
@@ -162,13 +167,23 @@
             data : {'_method' : 'DELETE', '_token' : csrf_token},
             success: function(data) {
               table.ajax.reload();
-              console.log(data)
+              swal({
+                title: 'Success..!',
+                text: 'Data has been deleted',
+                type: 'success',
+                timer: '800'
+              })
             },
             error : function () {
-              alert("Oops! Something Wrong!");
+              swal({
+                title: 'Oops..!',
+                text: 'Something went wrong!',
+                type: 'error',
+                timer: '1500'
+              })
             }
           })
-        }
+        })
       }
 
       // (2) edit form
@@ -210,9 +225,20 @@
                 success : function($data) {
                     $('#modal-form').modal('hide');
                     table.ajax.reload();
+                    swal({
+                      title: 'Success..!',
+                      text: 'Data has been Added',
+                      type: 'success',
+                      timer: '1500'
+                    })                    
                 },
                 error : function() {
-                    alert('Oops! Somethong Error!');
+                  swal({
+                    title: 'Oops..!',
+                    text: 'Something went wrong!',
+                    type: 'error',
+                    timer: '800'
+                  })
                 }
               });
               return false;
