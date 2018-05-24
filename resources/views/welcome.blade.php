@@ -135,6 +135,7 @@
                       {data: 'id', name:'id'},
                       {data: 'name', name:'name'},
                       {data: 'email', name:'email'},
+                      {data: 'show_photo', name:'photo'},
                       {data: 'action', name:'action', orderable: false, searchable: false},
                     ]
                   });
@@ -221,7 +222,10 @@
               $.ajax({
                 url : url,
                 type : "POST",
-                data : $('#modal-form form').serialize(),
+                // data : $('#modal-form form').serialize(),
+                data: new FormData($('#modal-form form')[0]),
+                contentType: false,
+                processData: false,
                 success : function($data) {
                     $('#modal-form').modal('hide');
                     table.ajax.reload();
