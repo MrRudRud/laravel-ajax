@@ -91,6 +91,7 @@
                     <table id="contact-table" class="table table-striped">
                         <thead>
                             <tr>
+                                <th width="30"><button type="button" name="bulk_delete" id="bulk_delete" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove"></i></button></th>
                                 <th width="30">No</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -132,6 +133,7 @@
                     serverSide: true,
                     ajax: "{{ route('api.contact')}}",
                     columns: [
+                      {data: 'checkbox', orderable: false, searchable: false},
                       {data: 'id', name:'id'},
                       {data: 'name', name:'name'},
                       {data: 'email', name:'email'},
@@ -250,6 +252,42 @@
         })
       });
  
+      $(document).on('click', '#bulk_delete', function(){
+        var id = [];
+        if(confirm("Are you sure you want to delete this data?")){
+          $('.contact:checked').each(function(){
+            id.push($(this).val());
+          });
+          if(id.length > 0)
+          {
+            $.ajax({
+              url: "{{ route('ajaxdata.massremove') }}",
+              method: "GET",
+              data: {id:id},
+              success:function(data)
+              {
+                // alert(data);
+                table.ajax.reload();
+                swal({
+                  title: 'Success..!',
+                  text: 'Data has been deleted',
+                  type: 'success',
+                  timer: '800'
+                })
+              }
+            });
+          }else{
+            swal({
+              title: 'Warning..!',
+              text: 'Please select atleast one checkbox',
+              type: 'warning',
+              timer: '2000'
+            })
+          }
+        }
+      });
+
+
     </script>
 
     </body>

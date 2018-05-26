@@ -124,22 +124,35 @@ class ContactController extends Controller
         ]);
     }
 
+    public function massremove(Request $request)
+    {
+        $contact_id = $request->input('id');
+        $contact = Contact::whereIn('id',$contact_id)->delete();
+        
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
     public function apiContact(){
         $contact = Contact::orderBy('id','desc');
         return Datatables::of($contact)
             // Add New Column with closure function Contact
+            
+            ->addColumn('checkbox', '<input type="checkbox" name="contact[]" class="contact" value="{{$id}}">')
             ->addColumn('show_photo', function($contact){
                 if($contact->photo == NULL){
                     return 'No Image';
                 }
                 return '<img class="rounded-square" width="50" height="50" src="'.url($contact->photo).'" alt="">';
-            })
+             })
             ->addColumn('action', function($contact) {
                 return 
                 '<a href="#" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-eye-open"></i> Show</a>'.
                 ' <a onclick="editForm('.$contact->id.')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a>'.
                 ' <a onclick="deleteData('.$contact->id.')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
             })
-            ->rawColumns(['show_photo', 'action'])->make(true);
+            ->rawColumns(['show_photo','action','checkbox', 'action'])
+            ->make(true);
     }
 }
